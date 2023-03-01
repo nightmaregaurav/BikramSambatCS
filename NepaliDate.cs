@@ -77,24 +77,30 @@ namespace DateConverter
             .Replace("yyy", $"{Year % 1000:000}")
             .Replace("yy", $"{Year % 100:00}")
             .Replace("y", $"{Year}")
+            
             .Replace("mmn", $"{(Month % 100).ToString("00").ToNepaliNumber()}")
             .Replace("mn", $"{Month.ToNepaliNumber()}")
             .Replace("mm", $"{Month % 100:00}")
             .Replace("m", $"{Month}")
+            
             .Replace("ddn", $"{(Day % 100).ToString("00").ToNepaliNumber()}")
             .Replace("dn", $"{Day.ToNepaliNumber()}")
             .Replace("dd", $"{Day % 100:00}")
             .Replace("d", $"{Day}")
+            
             .Replace("wn", $"{WeekDay.ToNepaliNumber()}")
             .Replace("w", $"{WeekDay}")
+            
             .Replace("MMn", $"{NepaliMonthName}")
             .Replace("MM", $"{MonthName}")
+            
             .Replace("DDDn", $"{NepaliDayName}")
             .Replace("DDn", $"{NepaliDayNameShort}")
             .Replace("Dn", $"{NepaliDayNameNarrow}")
             .Replace("DDD", $"{DayName}")
             .Replace("DD", $"{DayNameShort}")
             .Replace("D", $"{DayNameNarrow}")
+            
             .Replace("Fn", $"{ToNepaliString()}")
             .Replace("fn", $"{ToNepaliDateString()}")
             .Replace("F", $"{ToString()}")
