@@ -6,21 +6,16 @@ namespace DateConverter
     {
         public static NepaliDate ToBs(this DateOnly date)
         {
-            var startAdDate = DateData.StartAdDate;
-            var daysDiff = date.DayNumber - startAdDate.DayNumber;
-
-            if (daysDiff < 0) throw new DateToConvertCannotComeBeforeStartAdDateException(startAdDate);
-
+            if (date.CompareTo(DateData.StartAdDate) < 0) throw new DateToConvertCannotComeBeforeStartAdDateException(DateData.StartAdDate);
+            var daysDiff = date.DayNumber - DateData.StartAdDate.DayNumber;
             var bsDate = GetBsDateFromDaysDiff(daysDiff);
             return new NepaliDate(bsDate.Item1, bsDate.Item2, bsDate.Item3, date);
         }
 
         public static NepaliDate TodayBs() => DateOnly.FromDateTime(DateTime.Today).ToBs();
 
-        public static string ToNepaliNumber(this int number)
-        {
-            return number.ToString().Replace("0", "०").Replace("1", "१").Replace("2", "२").Replace("3", "३").Replace("4", "४").Replace("5", "५").Replace("6", "६").Replace("7", "७").Replace("8", "८").Replace("9", "९");
-        }
+        public static string ToNepaliNumber(this int number) => number.ToString().ToNepaliNumber();
+        internal static string ToNepaliNumber(this string number) =>  number.Replace("0", "०").Replace("1", "१").Replace("2", "२").Replace("3", "३").Replace("4", "४").Replace("5", "५").Replace("6", "६").Replace("7", "७").Replace("8", "८").Replace("9", "९");
         
         internal static DateOnly ConvertBsToAd(int year, int month, int day)
         {
