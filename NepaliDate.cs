@@ -29,10 +29,16 @@ namespace DateConverter
         public string DayNameNarrow => DateData.DayNamesInEnglishShortest[(int) DayOfWeek];
         public string NepaliDayNameNarrow => DateData.DayNamesInNepaliShortest[(int) DayOfWeek];
 
-        public override string ToString() => $"{Year}-{Month}-{Day} {DayName}";
-        public string ToNepaliString() => $"{Year.ToNepaliNumber()}-{Month.ToNepaliNumber()}-{Day.ToNepaliNumber()} {NepaliDayName}";
+        public override string ToString() => ToString('/');
+        public string ToString(char separator) => $"{Year}{separator}{Month}{separator}{Day} {DayName}";
+
+        public string ToNepaliString() => ToNepaliString('/');
+        public string ToNepaliString(char separator) => $"{Year.ToNepaliNumber()}{separator}{Month.ToNepaliNumber()}{separator}{Day.ToNepaliNumber()} {NepaliDayName}";
+
+        public string ToDateString() => ToDateString('/');
+        public string ToDateString(char separator) => $"{Year}{separator}{Month}{separator}{Day}";
         
-        public string ToDateString() => $"{Year}-{Month}-{Day}";
-        public string ToNepaliDateString() => $"{Year.ToNepaliNumber()}-{Month.ToNepaliNumber()}-{Day.ToNepaliNumber()}";
+        public string ToNepaliDateString() => ToNepaliDateString('/');
+        public string ToNepaliDateString(char separator) => $"{Year.ToNepaliNumber()}{separator}{Month.ToNepaliNumber()}{separator}{Day.ToNepaliNumber()}";
     }
 }
