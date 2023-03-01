@@ -22,7 +22,7 @@ namespace DateConverter
             return number.ToString().Replace("0", "०").Replace("1", "१").Replace("2", "२").Replace("3", "३").Replace("4", "४").Replace("5", "५").Replace("6", "६").Replace("7", "७").Replace("8", "८").Replace("9", "९");
         }
         
-        internal static DateOnly ConvertAdToBs(int year, int month, int day)
+        internal static DateOnly ConvertBsToAd(int year, int month, int day)
         {
             var daysDiff = 0;
             foreach (var yearData in DateData.DaysInMonthsForBsYear.Where(x => x.Key <= year))

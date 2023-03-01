@@ -13,7 +13,7 @@ namespace DateConverter
             Year = year;
             Month = month;
             Day = day;
-            AdInstance = adInstance ?? DateConverterService.ConvertAdToBs(year, month, day);
+            AdInstance = adInstance ?? DateConverterService.ConvertBsToAd(year, month, day);
             DayOfWeek = AdInstance.DayOfWeek;
         }
         
