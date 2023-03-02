@@ -32,43 +32,47 @@ namespace DateConverter
         public string DayNameNarrow => DateData.DayNamesInEnglishShortest[(int) DayOfWeek];
         public string NepaliDayNameNarrow => DateData.DayNamesInNepaliShortest[(int) DayOfWeek];
 
-        // yyyyn: 4 character number representation of year in nepali
-        // yyyn: 3 character number representation of year in nepali
-        // yyn: 2 character number representation of year in nepali
-        // yn: number representation of year as it is in nepali
-        // yyyy: 4 character number representation of year in english
-        // yyy: 3 character number representation of year in english
-        // yy: 2 character number representation of year in english
-        // y: number representation of year as it is in english
-        
-        // mmn: 2 character number representation of month in nepali
-        // mn: number representation of month as it is in nepali
-        // mm: 2 character number representation of month in english
-        // m: number representation of month as it is in english
-        
-        // ddn: 2 character number representation of day in nepali
-        // dn: number representation of day as it is in nepali
-        // ddn: 2 character number representation of day in english
-        // d: number representation of day as it is in english
-        
-        // wn: number representation of week day as it is in nepali
-        // w: number representation of week day as it is in english
-        
-        // MMn: month name in nepali
-        // MM: month name in english
-        
-        // DDDn: full weekday name in nepali
-        // DDn: short weekday name in nepali
-        // Dn: even short weekday name in nepali
-        // DDD: full weekday name in english
-        // DD: short weekday name in english
-        // D: even short weekday name in english
-
-        // Fn: full date string in nepali
-        // fn: date string in nepali
-        // F: full date string in english
-        // f: date string in english
-
+        /// <summary>Formats the value of the current instance using the specified format.</summary>
+        /// <param name="format">The format to use.<br/>
+        /// <br/>
+        /// yyyyn: 4 character number representation of year in nepali<br/>
+        /// yyyn: 3 character number representation of year in nepali<br/>
+        /// yyn: 2 character number representation of year in nepali<br/>
+        /// yn: number representation of year as it is in nepali<br/>
+        /// yyyy: 4 character number representation of year in english<br/>
+        /// yyy: 3 character number representation of year in english<br/>
+        /// yy: 2 character number representation of year in english<br/>
+        /// y: number representation of year as it is in english<br/>
+        /// <br/>
+        /// mmn: 2 character number representation of month in nepali<br/>
+        /// mn: number representation of month as it is in nepali<br/>
+        /// mm: 2 character number representation of month in english<br/>
+        /// m: number representation of month as it is in english<br/>
+        /// <br/>
+        /// ddn: 2 character number representation of day in nepali<br/>
+        /// dn: number representation of day as it is in nepali<br/>
+        /// ddn: 2 character number representation of day in english<br/>
+        /// d: number representation of day as it is in english<br/>
+        ///<br/>
+        /// wn: number representation of week day as it is in nepali<br/>
+        /// w: number representation of week day as it is in english<br/>
+        /// <br/>
+        /// MMn: month name in nepali<br/>
+        /// MM: month name in english<br/>
+        /// <br/>
+        /// DDDn: full weekday name in nepali<br/>
+        /// DDn: short weekday name in nepali<br/>
+        /// Dn: even short weekday name in nepali<br/>
+        /// DDD: full weekday name in english<br/>
+        /// DD: short weekday name in english<br/>
+        /// D: even short weekday name in english<br/>
+        /// <br/>
+        /// Fn: full date string in nepali<br/>
+        /// fn: date string in nepali<br/>
+        /// F: full date string in english<br/>
+        /// f: date string in english<br/>
+        /// </param>
+        /// <returns>The value of the current instance in the specified format.</returns>
         public string ToString(string format) => format
             .Replace("yyyyn", $"{(Year % 10000).ToString("0000").ToNepaliNumber()}")
             .Replace("yyyn", $"{(Year % 1000).ToString("000").ToNepaliNumber()}")
@@ -106,14 +110,13 @@ namespace DateConverter
             .Replace("fn", $"{ToNepaliDateString()}")
             .Replace("F", $"{ToString()}")
             .Replace("f", $"{ToDateString()}");
-
-        public string ToString(string? format, IFormatProvider? _) => ToString(format ?? "");
-        public override string ToString() => ToString('/');
         
-        public int CompareTo(NepaliDate obj) => AdInstance.DayNumber - obj.AdInstance.DayNumber;
-        public int CompareTo(object? obj) => obj?.GetType() != typeof(NepaliDate) ? 0 : CompareTo((NepaliDate) obj);
-
+        /// <summary>Formats the value of the current instance using the specified format.<br/> Only Kept for compatibility.<br/><b> Use ToString(format) instead!</b></summary>
+        public string ToString(string? format, IFormatProvider? _) => ToString(format ?? "");
+        
+        public override string ToString() => ToString('/');
         public string ToString(char separator) => $"{Year%10000:0000}{separator}{Month%100:00}{separator}{Day%100:00} {DayName}";
+        
         public string ToNepaliString() => ToNepaliString('/');
         public string ToNepaliString(char separator) => $"{(Year%10000).ToString("0000").ToNepaliNumber()}{separator}{(Month%100).ToString("00").ToNepaliNumber()}{separator}{(Day%100).ToString("00").ToNepaliNumber()} {NepaliDayName}";
 
@@ -123,6 +126,9 @@ namespace DateConverter
         public string ToNepaliDateString() => ToNepaliDateString('/');
         public string ToNepaliDateString(char separator) => $"{(Year%10000).ToString("0000").ToNepaliNumber()}{separator}{(Month%100).ToString("00").ToNepaliNumber()}{separator}{(Day%100).ToString("00").ToNepaliNumber()}";
 
+        public int CompareTo(NepaliDate obj) => AdInstance.DayNumber - obj.AdInstance.DayNumber;
+        public int CompareTo(object? obj) => obj?.GetType() != typeof(NepaliDate) ? 0 : CompareTo((NepaliDate) obj);
+        
         public static bool operator ==(NepaliDate left, NepaliDate right) => left.Year == right.Year && left.Month == right.Month && left.Day == right.Day;
         public static bool operator !=(NepaliDate left, NepaliDate right) => !(left == right);
         public static int operator -(NepaliDate left, NepaliDate right) => left.CompareTo(right);
