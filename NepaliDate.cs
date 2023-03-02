@@ -11,9 +11,12 @@ namespace DateConverter
 
         public NepaliDate(int year, int month, int day, DateOnly? adInstance = null)
         {
+            DateConverterService.ValidateBsDate(year, month, day);
+            
             Year = year;
             Month = month;
             Day = day;
+            
             AdInstance = adInstance ?? DateConverterService.ConvertBsToAd(year, month, day);
             DayOfWeek = AdInstance.DayOfWeek;
         }

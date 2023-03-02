@@ -16,9 +16,19 @@ namespace DateConverter
 
         public static string ToNepaliNumber(this int number) => number.ToString().ToNepaliNumber();
         internal static string ToNepaliNumber(this string number) =>  number.Replace("0", "०").Replace("1", "१").Replace("2", "२").Replace("3", "३").Replace("4", "४").Replace("5", "५").Replace("6", "६").Replace("7", "७").Replace("8", "८").Replace("9", "९");
+
+        internal static void ValidateBsDate(int year, int month, int day)
+        {
+            if (year < DateData.StartBsYear || year > DateData.EndBsYear) throw new UnsupportedYearException(DateData.StartBsYear, DateData.EndBsYear);
+            if (month is < 1 or > 12) throw new InvalidMonthException();
+            var maxDayInGivenMonthOfGivenYear = DateData.DaysInMonthsForBsYear[year][month - 1];
+            if (day < 1 || day > maxDayInGivenMonthOfGivenYear) throw new InvalidDayException(maxDayInGivenMonthOfGivenYear);
+        }
         
         internal static DateOnly ConvertBsToAd(int year, int month, int day)
         {
+            ValidateBsDate(year, month, day);
+            if (month is < 1 or > 12) throw new InvalidMonthException();
             var daysDiff = 0;
             foreach (var yearData in DateData.DaysInMonthsForBsYear.Where(x => x.Key <= year))
             {
