@@ -28,7 +28,6 @@ namespace DateConverter
         internal static DateOnly ConvertBsToAd(int year, int month, int day)
         {
             ValidateBsDate(year, month, day);
-            if (month is < 1 or > 12) throw new InvalidMonthException();
             var daysDiff = 0;
             foreach (var yearData in DateData.DaysInMonthsForBsYear.Where(x => x.Key <= year))
             {
