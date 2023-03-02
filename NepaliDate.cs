@@ -9,7 +9,7 @@ namespace DateConverter
         private DayOfWeek DayOfWeek { get; }
         public DateOnly AdInstance { get; }
 
-        public NepaliDate(int year, int month, int day, DateOnly? adInstance)
+        public NepaliDate(int year, int month, int day, DateOnly? adInstance = null)
         {
             Year = year;
             Month = month;
