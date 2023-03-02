@@ -1,10 +1,11 @@
 namespace DateConverter
 {
-    public class NepaliDate
+    public class NepaliDate : IComparable, IFormattable, IEquatable<NepaliDate>
     {
         public int Year { get; }
         public int Month { get; }
         public int Day { get; }
+        
         private DayOfWeek DayOfWeek { get; }
         public DateOnly AdInstance { get; }
 
@@ -21,7 +22,7 @@ namespace DateConverter
         public string NepaliMonthName => DateData.MonthNamesInNepali[Month - 1];
 
         public int WeekDay => (int) DayOfWeek;
-        
+
         public string DayName => DateData.DayNamesInEnglish[(int) DayOfWeek];
         public string NepaliDayName => DateData.DayNamesInNepali[(int) DayOfWeek];
         
@@ -106,7 +107,12 @@ namespace DateConverter
             .Replace("F", $"{ToString()}")
             .Replace("f", $"{ToDateString()}");
 
+        public string ToString(string? format, IFormatProvider? _) => ToString(format ?? "");
         public override string ToString() => ToString('/');
+        
+        public int CompareTo(NepaliDate obj) => AdInstance.DayNumber - obj.AdInstance.DayNumber;
+        public int CompareTo(object? obj) => obj?.GetType() != typeof(NepaliDate) ? 0 : CompareTo((NepaliDate) obj);
+
         public string ToString(char separator) => $"{Year%10000:0000}{separator}{Month%100:00}{separator}{Day%100:00} {DayName}";
         public string ToNepaliString() => ToNepaliString('/');
         public string ToNepaliString(char separator) => $"{(Year%10000).ToString("0000").ToNepaliNumber()}{separator}{(Month%100).ToString("00").ToNepaliNumber()}{separator}{(Day%100).ToString("00").ToNepaliNumber()} {NepaliDayName}";
@@ -116,5 +122,30 @@ namespace DateConverter
         
         public string ToNepaliDateString() => ToNepaliDateString('/');
         public string ToNepaliDateString(char separator) => $"{(Year%10000).ToString("0000").ToNepaliNumber()}{separator}{(Month%100).ToString("00").ToNepaliNumber()}{separator}{(Day%100).ToString("00").ToNepaliNumber()}";
+
+        public static bool operator ==(NepaliDate left, NepaliDate right) => left.Year == right.Year && left.Month == right.Month && left.Day == right.Day;
+        public static bool operator !=(NepaliDate left, NepaliDate right) => !(left == right);
+        public static int operator -(NepaliDate left, NepaliDate right) => left.CompareTo(right);
+        public static NepaliDate operator -(NepaliDate left, int right) => left.AdInstance.AddDays(-right).ToBs();
+        public static NepaliDate operator +(NepaliDate left, int right) => left.AdInstance.AddDays(right).ToBs();
+        public static bool operator <(NepaliDate left, NepaliDate right) => left.CompareTo(right) < 0;
+        public static bool operator >(NepaliDate left, NepaliDate right) => left.CompareTo(right) > 0;
+        public static bool operator >=(NepaliDate left, NepaliDate right) => left.CompareTo(right) >= 0;
+        public static bool operator <=(NepaliDate left, NepaliDate right) => left.CompareTo(right) <= 0;
+        
+        public bool Equals(NepaliDate? other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return this == other;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((NepaliDate) obj);
+        }
+        public override int GetHashCode() => HashCode.Combine(Year, Month, Day);
     }
 }
