@@ -51,7 +51,7 @@ namespace DateConverter.Services
                 {
                     bsMonth++;
                     bsDay = 0;
-                    if (daysDiff <= days)
+                    if (daysDiff < days)
                     {
                         found = true;
                         bsDay = daysDiff + 1;
