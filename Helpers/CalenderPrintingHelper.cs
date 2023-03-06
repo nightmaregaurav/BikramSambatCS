@@ -199,7 +199,7 @@ namespace DateConverter.Helpers
                     if (day != null)
                     {
                         result += day + AdBsDaySeparator + date.ToAd().Day;
-                        date += 1;
+                        if(date != new NepaliDate(DateData.EndBsYear).GetYearEnd()) date += 1;
                     }
                     result += "\t";
                 }
@@ -237,7 +237,7 @@ namespace DateConverter.Helpers
                         if (day != null)
                         {
                             result += day + AdBsDaySeparator + date.ToAd().Day;
-                            date += 1;
+                            if(date != new NepaliDate(DateData.EndBsYear).GetYearEnd()) date += 1;
                         }
                         result += "\t";
                     }
@@ -294,7 +294,7 @@ namespace DateConverter.Helpers
                     if (day != null)
                     {
                         result += day.ToNepaliNumber() + AdBsDaySeparator + date.ToAd().Day;
-                        date += 1;
+                        if(date != new NepaliDate(DateData.EndBsYear).GetYearEnd()) date += 1;
                     }
                     result += "\t";
                 }
@@ -332,7 +332,7 @@ namespace DateConverter.Helpers
                         if (day != null)
                         {
                             result += day.ToNepaliNumber() + AdBsDaySeparator + date.ToAd().Day;
-                            date += 1;
+                            if(date != new NepaliDate(DateData.EndBsYear).GetYearEnd()) date += 1;
                         }
                         result += "\t";
                     }
