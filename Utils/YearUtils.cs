@@ -1,8 +1,15 @@
+using DateConverter.Services;
+
 namespace DateConverter.Utils
 {
     public abstract class YearUtils
     {
         public static NepaliDate GetYearEnd(int year) => new NepaliDate(year, 12, DateData.DaysInMonthsForBsYear[year][11]);
+        public static int GetDaysInYear(int year)
+        {
+            DateValidationService.ValidateBsDate(year,1, 1);
+            return DateData.DaysInMonthsForBsYear[year].Sum();
+        }
 
         public static List<List<List<int?>>> GetYearCalender(int year)
         {
