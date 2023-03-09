@@ -1,3 +1,4 @@
+using DateConverter.Exceptions;
 using DateConverter.Extensions;
 using DateConverter.Helpers;
 using DateConverter.Services;
@@ -53,6 +54,21 @@ namespace DateConverter
         
         public string ToNepaliDateString() => ToNepaliDateString('/');
         public string ToNepaliDateString(char separator) => $"{(Year%10000).ToString("0000").ToNepaliNumber()}{separator}{(Month%100).ToString("00").ToNepaliNumber()}{separator}{(Day%100).ToString("00").ToNepaliNumber()}";
+        
+        /// <summary>Converts given string to NepaliDate.<br/>Supports formats:<br/> 2077-01-01<br/> 2077/01/01<br/> 2077 01 01</summary>
+        /// <param name="date">Date string to convert</param>
+        /// <exception cref="InvalidDateFormatException">Thrown when date string is not in supported format</exception>
+        /// <returns>NepaliDate instance</returns>
+        public static NepaliDate FromString(string date)
+        {
+            var split = date.Split('-', '/', ' ');
+            if (split.Take(3).All(x => int.TryParse(x, out _)))
+            {
+                return new NepaliDate(int.Parse(split[0]), int.Parse(split[1]), int.Parse(split[2]));
+            }
+
+            throw new InvalidDateFormatException(date);
+        }
 
         public int CompareTo(NepaliDate obj) => AdInstance.DayNumber - obj.AdInstance.DayNumber;
         public int CompareTo(object? obj) => obj?.GetType() != typeof(NepaliDate) ? 0 : CompareTo((NepaliDate) obj);
