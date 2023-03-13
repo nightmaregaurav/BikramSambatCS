@@ -40,8 +40,8 @@ namespace DateConverter
         public string DayNameNarrow => DateData.DayNamesInEnglishShortest[(int) DayOfWeek];
         public string NepaliDayNameNarrow => DateData.DayNamesInNepaliShortest[(int) DayOfWeek];
 
-        /// <summary>Formats the value of the current instance using the specified format.<br/> Only Kept for compatibility.<br/><b> Use ToString(format) instead!</b></summary>
-        public string ToString(string? format, IFormatProvider? _) => this.ToString(format ?? "");
+        [Obsolete("The provider argument is not used. Use ToString(String) instead.")]
+        public string ToString(string? format, IFormatProvider? provider) => this.ToString(format ?? "");
         
         public override string ToString() => ToString('/');
         public string ToString(char separator) => $"{Year%10000:0000}{separator}{Month%100:00}{separator}{Day%100:00} {DayName}";
