@@ -1,71 +1,67 @@
 using DateConverter.Exceptions;
 
-namespace DateConverter.Services
+namespace DateConverter.Services;
+
+public abstract class DateConverterService
 {
-    public abstract class DateConverterService
+    public static NepaliDate ConvertAdToBs(DateOnly date)
     {
-        public static NepaliDate ConvertAdToBs(DateOnly date)
+        if (date.CompareTo(DateData.StartAdDate) < 0) throw new DateToConvertCannotComeBeforeStartAdDateException(DateData.StartAdDate);
+        var daysDiff = date.DayNumber - DateData.StartAdDate.DayNumber;
+        var bsDate = GetBsDateFromDaysDiff(daysDiff);
+        return new NepaliDate(bsDate.Item1, bsDate.Item2, bsDate.Item3, date);
+    }
+
+    public static DateOnly ConvertBsToAd(int year, int month, int day)
+    {
+        DateValidationService.ValidateBsDate(year, month, day);
+        var daysDiff = 0;
+        foreach (var yearData in DateData.DaysInMonthsForBsYear.Where(x => x.Key <= year))
         {
-            if (date.CompareTo(DateData.StartAdDate) < 0) throw new DateToConvertCannotComeBeforeStartAdDateException(DateData.StartAdDate);
-            var daysDiff = date.DayNumber - DateData.StartAdDate.DayNumber;
-            var bsDate = GetBsDateFromDaysDiff(daysDiff);
-            return new NepaliDate(bsDate.Item1, bsDate.Item2, bsDate.Item3, date);
+            if (yearData.Key == year)
+            {
+                for (var i = 1; i < month; i++) daysDiff += yearData.Value[i - 1];
+                daysDiff += day - 1;
+                break;
+            }
+            daysDiff += yearData.Value.Sum();
         }
 
-        public static DateOnly ConvertBsToAd(int year, int month, int day)
+        if (daysDiff < 0) throw new DateToConvertCannotComeBeforeStartBsDateException(DateData.StartBsYear);
+
+        return DateData.StartAdDate.AddDays(daysDiff);
+    }
+
+    private static Tuple<int, int, int> GetBsDateFromDaysDiff(int daysDiff)
+    {
+        var found = false;
+
+        var bsYear = 0;
+        var bsMonth = 0;
+        var bsDay = 0;
+
+        foreach (var yearData in DateData.DaysInMonthsForBsYear.OrderBy(x => x.Key))
         {
-            DateValidationService.ValidateBsDate(year, month, day);
-            var daysDiff = 0;
-            foreach (var yearData in DateData.DaysInMonthsForBsYear.Where(x => x.Key <= year))
+            bsYear = yearData.Key;
+            bsMonth = 0;
+            foreach (var days in yearData.Value)
             {
-                if (yearData.Key == year)
+                bsMonth++;
+                bsDay = 0;
+                if (daysDiff < days)
                 {
-                    for (var i = 1; i < month; i++)
-                    {
-                        daysDiff += yearData.Value[i - 1];
-                    }
-                    daysDiff += day - 1;
+                    found = true;
+                    bsDay = daysDiff + 1;
                     break;
                 }
-                daysDiff += yearData.Value.Sum();
+
+                daysDiff -= days;
             }
-            
-            if (daysDiff < 0) throw new DateToConvertCannotComeBeforeStartBsDateException(DateData.StartBsYear);
-            
-            return DateData.StartAdDate.AddDays(daysDiff);
+            if (found) break;
         }
 
-        private static Tuple<int, int, int> GetBsDateFromDaysDiff(int daysDiff)
-        {
-            var found = false;
-            
-            var bsYear = 0;
-            var bsMonth = 0;
-            var bsDay = 0;
+        if (!found) throw new DateToConvertCannotComeAfterEndBsDateException(DateData.EndBsYear);
 
-            foreach (var yearData in DateData.DaysInMonthsForBsYear.OrderBy(x => x.Key))
-            {
-                bsYear = yearData.Key;
-                bsMonth = 0;
-                foreach (var days in yearData.Value)
-                {
-                    bsMonth++;
-                    bsDay = 0;
-                    if (daysDiff < days)
-                    {
-                        found = true;
-                        bsDay = daysDiff + 1;
-                        break;
-                    }
-
-                    daysDiff -= days;
-                }
-                if (found) break;
-            }
-            
-            if (!found) throw new DateToConvertCannotComeAfterEndBsDateException(DateData.EndBsYear);
-
-            return new Tuple<int, int, int>(bsYear, bsMonth, bsDay);
-        }
+        return new Tuple<int, int, int>(bsYear, bsMonth, bsDay);
     }
 }
