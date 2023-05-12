@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+using DateConverter.Converters;
 using DateConverter.Exceptions;
 using DateConverter.Extensions;
 using DateConverter.Helpers;
@@ -5,6 +7,7 @@ using DateConverter.Services;
 
 namespace DateConverter;
 
+[JsonConverter(typeof(NepaliDateJsonConverter))]
 public class NepaliDate : IComparable, IFormattable, IEquatable<NepaliDate>
 {
     public int Year { get; }
