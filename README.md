@@ -1,5 +1,5 @@
-# DateConverter
-Nepali Date Converter and Representation in C#
+# BikramSambatCS
+Nepali Date(Bikram Sambat) Converter and Representation in C#
 
 ## Note
 - Project is Liscenced under GNU GPLv3.
